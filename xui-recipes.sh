@@ -320,7 +320,6 @@ client_obj() { # $1=proto $2=email $3=subId $4=uuid $5=password $6=auth [$7=meth
   case "$proto" in
     ss|ss2022) extra="\"method\":\"$m\"," ;;
     vmess)     extra="\"alterId\":0," ;;
-    http)      extra="\"username\":\"$e\"," ;;
   esac
   # NOTE: keep this MINIMAL. Panels with strict body validation reject
   # unknown/extra client fields ("request body failed validation"), but every
@@ -346,7 +345,6 @@ client_obj() { # $1=proto $2=email $3=subId $4=uuid $5=password $6=auth [$7=meth
     hysteria) printf '{"id":"%s","password":"%s","auth":"%s","email":"%s","subId":"%s"}' "$u" "$p" "$a" "$e" "$su" ;;
     tuic)   printf '{"id":"%s","password":"%s","email":"%s","subId":"%s"}' "$u" "$p" "$e" "$su" ;;
     ss|ss2022) printf '{"id":"%s","password":"%s","email":"%s","subId":"%s"}' "$u" "$p" "$e" "$su" ;;
-    http)   printf '{"id":"%s","username":"%s","password":"%s","email":"%s","subId":"%s"}' "$u" "$e" "$p" "$e" "$su" ;;
     *)      printf '{"id":"%s","email":"%s","subId":"%s"}' "$u" "$e" "$su" ;;
   esac
 }
@@ -423,8 +421,6 @@ settings_json() {
       ;;
     vmess|trojan)
       printf '{"clients":%s}' "$(clients_json "$proto")" ;;
-    http)
-      printf '{"clients":%s,"timeout":3600}' "$(clients_json http)" ;;
     hysteria)
       printf '{"clients":%s,"version":2}' "$(clients_json hysteria)" ;;
     hy2)
@@ -576,7 +572,7 @@ R_NAME=(
   "VLESS-TCP-REALITY-443-01" "VMESS-WSS-TLS-01" "VMESS-TCP-TLS-01" "TROJAN-TCP-TLS-01"
   "TROJAN-WSS-TLS-01" "TROJAN-TCP-REALITY-01" "VMESS-gRPC-TLS-01" "VMESS-HTTPU-TLS-01"
   "VMESS-XHTTP-TLS-01" "HYSTERIA-UDP-TLS-01" "VLESS-gRPC-Reality-01" "VLESS-gRPC-TLS-01"
-  "SS-TCP-CHACHA-01" "SS2022-TCP-BLAKE-01" "HTTP-TCP-BASIC-01" "HY2-UDP-TLS-h3"
+  "SS-TCP-CHACHA-01" "SS2022-TCP-BLAKE-01" "HY2-UDP-TLS-h3"
   "TUIC-v5-h3" "VLESS-XHTTP2-MLKEM-TLS-01" "VLESS-TCP-MLKEM-REALITY-01" "VLESS-XHTTP2-MLKEM-REALITY-01"
   "VLESS-gRPC-MLKEM-TLS-01" "VLESS-HUPG-MLKEM-TLS-01" "VLESS-TCP-XTLS-Vision-TLS-01"
 )
@@ -586,7 +582,7 @@ R_PROTO=(
   vless vmess vmess trojan
   trojan trojan vmess vmess
   vmess hysteria vless vless
-  sl ss2022 http hy2
+  sl ss2022 hy2
   tuic vless vless vless
   vless vless vless
 )
@@ -596,7 +592,7 @@ R_PORT=(
   443 20111 20112 20121
   20122 20213 20210 20212
   20214 20211 20132 20133
-  20131 20170 20141 20151
+  20131 20170 20151
   20161 20221 20222 20223
   20224 20225 20226
 )
@@ -606,7 +602,7 @@ R_STREAM=(
   "st_tcp_reality" "st_wss_tls /vms" "st_tcp_tls [\"h3\",\"http/1.1\",\"h2\"]" "st_tcp_tls [\"h3\",\"http/1.1\"]"
   "st_wss_tls /trj" "st_trojan_reality" "st_grpc_tls" "st_hupg_tls /vmh"
   "st_xhttp_tls /vmx [\"h2\",\"http/1.1\"]" "st_hysteria_finalmask" "st_grpc_reality" "st_grpc_tls"
-  "st_tcp_plain" "st_tcp_plain" "st_tcp_plain" "st_hysteria_tls"
+  "st_tcp_plain" "st_tcp_plain" "st_hysteria_tls"
   "st_tuic" "st_xhttp_tls /xhttp2-mlkem [\"h2\",\"http/1.1\"]" "st_tcp_reality" "st_xhttp_reality /xhttp-mlkem-reality"
   "st_grpc_tls" "st_hupg_tls /mlkem" "st_tcp_tls [\"h2\",\"http/1.1\"]"
 )
@@ -614,7 +610,7 @@ R_STREAM=(
 R_ENC=(
   0 0 0 0 1 0 0 0
   0 0 0 0 0 0 0 0
-  0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0
   0 1 1 1 1 1 0
 )
 
@@ -689,6 +685,16 @@ main() {
 
   BASE="https://$host:$port/${basepath#/}"
   TOKEN="$token"
+
+  # The panel's TLS cert usually matches its domain, not the bare IP the user
+  # typed. Without -k every request fails with curl 60 / schannel SEC_E_WRONG_PRINCIPAL
+  # before any recipe logic runs. Auto-enable insecure TLS for IP hosts unless
+  # the user set XUI_INSECURE explicitly.
+  if [ -z "${XUI_INSECURE:-}" ] && printf '%s' "$host" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
+    XUI_INSECURE=1
+    CURL_TLS="-k"
+    warn "host is an IP address — skipping TLS verification (cert is issued for a domain)"
+  fi
 
   local probe
   probe=$(api GET "/panel/api/inbounds/list")
