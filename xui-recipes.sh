@@ -35,6 +35,28 @@ TOKEN=""
 CERT_FILE="/root/cert/ip/fullchain.pem"
 CERT_KEY="/root/cert/ip/privkey.pem"
 
+# Prompt helper. When the script is piped (curl ... | bash) stdin is the script
+# itself, so interactive read would get EOF from the pipe. Read user answers
+# from the controlling terminal instead; fall back to stdin when there is none.
+ask() {  # ask [-s] "prompt" var
+  local silent=0 prompt="" var
+  [ "$1" = "-s" ] && { silent=1; shift; }
+  prompt="$1"; var="$2"
+  if : 2>/dev/null < /dev/tty; then            # real terminal exists
+    if [ "$silent" = 1 ]; then
+      IFS= read -rs "$var" < /dev/tty
+    else
+      IFS= read -rp "$prompt" "$var" < /dev/tty
+    fi
+  else                                          # no tty: fall back to stdin
+    if [ "$silent" = 1 ]; then
+      IFS= read -rs "$var"
+    else
+      IFS= read -rp "$prompt" "$var"
+    fi
+  fi
+}
+
 log()  { printf '%s\n' "$*"; }
 ok()   { printf '[ok] %s\n' "$*"; }
 warn() { printf '[!]  %s\n' "$*" >&2; }
@@ -678,10 +700,16 @@ main() {
   echo
 
   local host port basepath token
-  read -rp  "Panel host (IP or domain): " host;     [ -n "$host" ]     || die "host required"
-  read -rp  "Panel port: " port;                     [ -n "$port" ]     || die "port required"
-  read -rp  "WebBasePath (e.g. aBc123): " basepath;  [ -n "$basepath" ] || die "base path required"
-  read -rsp "API token: " token; echo;               [ -n "$token" ]    || die "token required"
+  # non-interactive mode: all credentials may come from environment variables
+  if [ -n "${XUI_HOST:-}" ] && [ -n "${XUI_PORT:-}" ] && [ -n "${XUI_TOKEN:-}" ] && [ -n "${XUI_BASEPATH:-}" ]; then
+    host="${XUI_HOST}"; port="${XUI_PORT}"; basepath="${XUI_BASEPATH}"; token="${XUI_TOKEN}"
+    log "Using credentials from XUI_HOST / XUI_PORT / XUI_BASEPATH / XUI_TOKEN"
+  else
+    ask "Panel host (IP or domain): " host;     [ -n "$host" ]     || die "host required"
+    ask "Panel port: " port;                     [ -n "$port" ]     || die "port required"
+    ask "WebBasePath (e.g. aBc123): " basepath;  [ -n "$basepath" ] || die "base path required"
+    ask -s "API token: " token; echo;            [ -n "$token" ]    || die "token required"
+  fi
 
   BASE="https://$host:$port/${basepath#/}"
   TOKEN="$token"
