@@ -1,3 +1,5 @@
+<p dir="auto"><a href="/nekogs/xui-recipes/blob/main/README.md">English</a> | <a href="/nekogs/xui-recipes/blob/main/README.fa.md">فارسی</a> | <a href="/nekogs/xui-recipes/blob/main/README.ar_EG.md">العربية</a> | <a href="/nekogs/xui-recipes/blob/main/README.zh.md">中文</a> | <a href="/nekogs/xui-recipes/blob/main/README.es.md">Español</a> | <a href="/nekogs/xui-recipes/blob/main/README.ru.md">Русский</a> | <a href="/nekogs/xui-recipes/blob/main/README.tr_TR.md">Türkçe</a></p>
+
 # xui-recipes — Генератор inbounds (прокси) для <a href="https://github.com/MHSanaei/3x-ui" target="_blank">3x-ui</a> панели
 
 Создаёт стандартный набор Inbounds «рецептов» Xray на вашей панели через её REST API.
