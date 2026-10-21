@@ -879,7 +879,7 @@ main() {
     api POST "/panel/api/inbounds/del/$SEED_ID" >/dev/null
     ok "removed seed inbound id=$SEED_ID"
   else
-    warn "seed inbound was not created or has invalid id, skipping cleanup"
+    log "seed inbound was not used — nothing to clean up"
   fi
 
   # ---- apply XTLS Vision flow to all clients (v3) ----
