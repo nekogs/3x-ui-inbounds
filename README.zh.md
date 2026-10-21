@@ -1,4 +1,6 @@
-# xui-recipes — 3x-ui / x-ui 面板入站脚本独立安装器
+<p dir="auto"><a href="/README.md">English</a> | <a href="/README.fa.md">فارسی</a> | <a href="/README.ar_EG.md">العربية</a> | <a href="/README.zh.md">中文</a> | <a href="/README.es.md">Español</a> | <a href="/README.ru.md">Русский</a> | <a href="/README.tr_TR.md">Türkçe</a></p>
+
+# 3x-ui-inbounds — [3x-ui](https://github.com/MHSanaei/3x-ui) 面板的 Xray 入站（代理）生成器
 
 通过 REST API 在您的面板上创建一套标准的 Xray "recipe"。可在**任意 Linux 主机**
 （笔记本、VPS、CI）上运行——只需要能网络访问面板，无需安装在 3x-ui 服务器上。
@@ -106,11 +108,11 @@ XUI_INSECURE=1 ./xui-recipes.sh        # 跳过 TLS 验证（自签名）
 shell 变量中。密钥每次运行时都会重新生成（REALITY X25519 密钥对、客户端 UUID、密码、
 Hysteria 认证令牌、SS-2022 PSK、KCP seed、salamander 混淆密码）。
 
-本脚本使用 AI 助手编写，调试和测试均为手动完成。
+本脚本使用 AI 智能体编写，调试和测试均为手动完成。
 
 ## 支持作者
 
-脚本作者是中华人民共和国的一名政治犯。如果您能赞助一些方便面，我将不胜感激！
+脚本作者是俄罗斯的一名政治犯。如果您能赞助一些方便面，我将不胜感激！
 
 |           | 地址                                                                 |
 |-----------|-----------------------------------------------------------------------|

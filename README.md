@@ -1,4 +1,6 @@
-# xui-recipes — standalone installer of 3x-ui / x-ui proxy inbounds
+<p dir="auto"><a href="/README.md">English</a> | <a href="/README.fa.md">فارسی</a> | <a href="/README.ar_EG.md">العربية</a> | <a href="/README.zh.md">中文</a> | <a href="/README.es.md">Español</a> | <a href="/README.ru.md">Русский</a> | <a href="/README.tr_TR.md">Türkçe</a></p>
+
+# 3x-ui-inbounds — Xray inbound (proxy) generator for the [3x-ui](https://github.com/MHSanaei/3x-ui) panel
 
 Creates a standard set of Xray "recipe" inbounds on your panel through its REST API.
 Runs on **any Linux host** (laptop, VPS, CI) — it only needs network access to the

@@ -1,4 +1,6 @@
-# xui-recipes — Instalador independiente de inbounds para el panel 3x-ui / x-ui
+<p dir="auto"><a href="/README.md">English</a> | <a href="/README.fa.md">فارسی</a> | <a href="/README.ar_EG.md">العربية</a> | <a href="/README.zh.md">中文</a> | <a href="/README.es.md">Español</a> | <a href="/README.ru.md">Русский</a> | <a href="/README.tr_TR.md">Türkçe</a></p>
+
+# 3x-ui-inbounds — Generador de inbounds (proxy) de Xray para el panel [3x-ui](https://github.com/MHSanaei/3x-ui)
 
 Crea un conjunto estándar de "recetas" de Xray a través de su API REST. Se ejecuta en
 **cualquier host con Linux** (portátil, VPS, CI): solo necesita acceso a la red al panel,
@@ -77,7 +79,7 @@ Todas las claves (claves, UUID, contraseñas, tokens) se generan localmente y no
 | `VLESS-XHTTP2-REALITY-01`       | VLESS + XHTTP2 + REALITY                       | sin flow (mKCP)           |
 | `VLESS-XHTTP2-TLS-01`           | VLESS + XHTTP2 + TLS                           |                           |
 | `VLESS-XHTTP3-TLS-01`           | VLESS + XHTTP3 + TLS                           |                           |
-| `VLESS-KCP-NONE-01`             | VLESS + mKCP (sin seguridad de transporte)      | sin flow                  |
+| `VLESS-KCP-NONE-01`             | VLESS + mKCP (sin seguridad de transporte)     | sin flow                  |
 | `VLESS-TCP-XTLS-Vision-01`      | VLESS + TCP + XTLS Vision                      |                           |
 | `VLESS-TCP-XTLS-Vision-TLS-01`  | VLESS + TCP + XTLS Vision + TLS                | cifrado ML-KEM            |
 | `VLESS-gRPC-Reality-01`         | VLESS + gRPC + REALITY                         |                           |
@@ -109,13 +111,14 @@ viven en variables de shell durante la ejecución. Las claves se generan cada ve
 claves X25519 REALITY, UUID de cliente, contraseñas, tokens de autenticación Hysteria, PSK
 SS-2022, KCP seed, contraseñas de ofuscación salamander).
 
-Este script fue escrito usando un agente de IA; la depuración y el prueba se realizaron manualmente.
+Este script fue escrito con la ayuda de un agente de IA; la depuración y las pruebas se realizaron manualmente.
 
 ## Apoyar al autor
 
-El autor del script es un prisionero político en China. Si puede donar algo para fideos instantáneos, ¡le estaré agradecido!
+El autor del script es un preso político en Rusia. Si puede aportar algo para comprar
+fideos instantáneos, ¡le estaré muy agradecido!
 
-|           | Dirección                                                                 |
+|           | Dirección                                                              |
 |-----------|-----------------------------------------------------------------------|
 | 💵 USDT (ERC-20) | `0x23c23dc5ed6888d9287da95cba454d4889241202` |
 | ₿ BTC      | `bc1q7x2ez0atrtgq0qc5n3phszud0d3geuqvzhhhtu` |
