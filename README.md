@@ -11,7 +11,7 @@ auth tokens, SS-2022 PSKs, KCP seed, salamander obfuscation passwords).
 
 ## Install & run
 
-One-liner (same style as the official 3x-ui installer):
+One-liner:
 
 ```bash
 curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
