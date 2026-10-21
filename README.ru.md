@@ -11,7 +11,7 @@ Hysteria, PSK SS-2022, KCP seed, пароли obfuscation salamander).
 
 ## Установка и запуск
 
-Одной строкой (как в официальном установщике 3x-ui):
+Одной строкой:
 
 ```bash
 curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
