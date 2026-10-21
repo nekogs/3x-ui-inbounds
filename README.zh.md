@@ -3,9 +3,30 @@
 通过 REST API 在您的面板上创建一套标准的 Xray "recipe"。可在**任意 Linux 主机**
 （笔记本、VPS、CI）上运行——只需要能网络访问面板，无需安装在 3x-ui 服务器上。
 
-密码绝不会写入磁盘：主机名、端口、WebBasePath 和 API token 仅在脚本运行期间保留在
-shell 变量中。密钥每次运行时都会重新生成（REALITY X25519 密钥对、客户端 UUID、密码、
-Hysteria 认证令牌、SS-2022 PSK、KCP seed、salamander 混淆密码）。
+> [!IMPORTANT]
+> 安装前请在面板上启用 API 访问权限。详见下方「安装前」章节。
+
+## 安装前
+
+您需要启用面板的 API 访问权限。使用 3x-ui（x-ui）安装脚本在安装过程中创建的令牌。
+
+**API Token：**
+
+```
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+然后打开：
+
+```
+#Access URL#/panel/api-docs
+```
+
+点击 **Authorize** → 将令牌粘贴到 `bearerAuth` 字段（`http`，`Bearer`）→ 点击 **Authorize**。
+
+> [!WARNING]
+> 启用 API 访问后，面板可能无法在同一浏览器窗口中打开。请清除缓存或以隐身模式
+> 打开新标签页来解决此问题。
 
 ## 安装与运行
 
@@ -78,6 +99,23 @@ XUI_INSECURE=1 ./xui-recipes.sh        # 跳过 TLS 验证（自签名）
 | `VLESS-XHTTP2-MLKEM-REALITY-01` | VLESS + XHTTP2 + REALITY + ML-KEM     | 后量子加密               |
 | `VLESS-gRPC-MLKEM-TLS-01`       | VLESS + gRPC + TLS + ML-KEM           | 后量子加密               |
 | `VLESS-HUPG-MLKEM-TLS-01`       | VLESS + HTTPUpgrade + TLS + ML-KEM    | 后量子加密               |
+
+## 说明
+
+密码绝不会写入磁盘：主机名、端口、WebBasePath 和 API token 仅在脚本运行期间保留在
+shell 变量中。密钥每次运行时都会重新生成（REALITY X25519 密钥对、客户端 UUID、密码、
+Hysteria 认证令牌、SS-2022 PSK、KCP seed、salamander 混淆密码）。
+
+本脚本使用 AI 助手编写，调试和测试均为手动完成。
+
+## 支持作者
+
+脚本作者是中华人民共和国的一名政治犯。如果您能赞助一些方便面，我将不胜感激！
+
+|           | 地址                                                                 |
+|-----------|-----------------------------------------------------------------------|
+| 💵 USDT (ERC-20) | `0x23c23dc5ed6888d9287da95cba454d4889241202` |
+| ₿ BTC      | `bc1q7x2ez0atrtgq0qc5n3phszud0d3geuqvzhhhtu` |
 
 ## 许可证
 

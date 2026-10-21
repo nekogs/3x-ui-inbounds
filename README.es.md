@@ -4,10 +4,31 @@ Crea un conjunto estándar de "recetas" de Xray a través de su API REST. Se eje
 **cualquier host con Linux** (portátil, VPS, CI): solo necesita acceso a la red al panel,
 no estar instalado *en* el servidor 3x-ui.
 
-Las contraseñas nunca se escriben en disco: host, puerto, WebBasePath y token de API solo
-viven en variables de shell durante la ejecución. Las claves se generan cada vez (pares de
-claves X25519 REALITY, UUID de cliente, contraseñas, tokens de autenticación Hysteria, PSK
-SS-2022, KCP seed, contraseñas de ofuscación salamander).
+> [!IMPORTANT]
+> Antes de instalar, active el acceso a la API en el panel. Consulte "Antes de instalar" abajo.
+
+## Antes de instalar
+
+Debe habilitar el acceso a la API del panel. Use el token que el script de instalación
+de 3x-ui (x-ui) crea durante el proceso de instalación.
+
+**API Token:**
+
+```
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Luego abra:
+
+```
+#Access URL#/panel/api-docs
+```
+
+Haga clic en **Authorize** → introduzca el token en el campo `bearerAuth` (`http`, `Bearer`) → haga clic en **Authorize**.
+
+> [!WARNING]
+> Después de habilitar el acceso a la API, el panel puede no abrirse en la misma ventana
+> del navegador. Para resolverlo, limpie la caché o abra una pestaña en modo incógnito.
 
 ## Instalación y ejecución
 
@@ -80,6 +101,24 @@ Todas las claves (claves, UUID, contraseñas, tokens) se generan localmente y no
 | `VLESS-XHTTP2-MLKEM-REALITY-01` | VLESS + XHTTP2 + REALITY + ML-KEM              | cifrado post-cuántico     |
 | `VLESS-gRPC-MLKEM-TLS-01`       | VLESS + gRPC + TLS + ML-KEM                    | cifrado post-cuántico     |
 | `VLESS-HUPG-MLKEM-TLS-01`       | VLESS + HTTPUpgrade + TLS + ML-KEM             | cifrado post-cuántico     |
+
+## Notas
+
+Las contraseñas nunca se escriben en disco: host, puerto, WebBasePath y token de API solo
+viven en variables de shell durante la ejecución. Las claves se generan cada vez (pares de
+claves X25519 REALITY, UUID de cliente, contraseñas, tokens de autenticación Hysteria, PSK
+SS-2022, KCP seed, contraseñas de ofuscación salamander).
+
+Este script fue escrito usando un agente de IA; la depuración y el prueba se realizaron manualmente.
+
+## Apoyar al autor
+
+El autor del script es un prisionero político en China. Si puede donar algo para fideos instantáneos, ¡le estaré agradecido!
+
+|           | Dirección                                                                 |
+|-----------|-----------------------------------------------------------------------|
+| 💵 USDT (ERC-20) | `0x23c23dc5ed6888d9287da95cba454d4889241202` |
+| ₿ BTC      | `bc1q7x2ez0atrtgq0qc5n3phszud0d3geuqvzhhhtu` |
 
 ## Licencia
 
