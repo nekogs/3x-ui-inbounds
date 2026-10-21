@@ -1,4 +1,4 @@
-# xui-recipes — standalone installer of 3x-ui / x-ui proxy inbounds
+# xui-recipes — Генератор inbounds (прокси) для <a href="https://github.com/MHSanaei/3x-ui" target="_blank">3x-ui</a> панели
 
 Создаёт стандартный набор Inbounds «рецептов» Xray на вашей панели через её REST API.
 Запускается на **любом Linux-хосте** (ноутбук, VPS, CI) — нужен только сетевой
