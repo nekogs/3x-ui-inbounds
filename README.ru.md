@@ -1,4 +1,4 @@
-<p dir="auto"><a href="/nekogs/xui-recipes/blob/main/README.md">English</a> | <a href="/nekogs/xui-recipes/blob/main/README.fa.md">فارسی</a> | <a href="/nekogs/xui-recipes/blob/main/README.ar_EG.md">العربية</a> | <a href="/nekogs/xui-recipes/blob/main/README.zh.md">中文</a> | <a href="/nekogs/xui-recipes/blob/main/README.es.md">Español</a> | <a href="/nekogs/xui-recipes/blob/main/README.ru.md">Русский</a> | <a href="/nekogs/xui-recipes/blob/main/README.tr_TR.md">Türkçe</a></p>
+<p dir="auto"><a href="/README.md">English</a> | <a href="/README.fa.md">فارسی</a> | <a href="/README.ar_EG.md">العربية</a> | <a href="/README.zh.md">中文</a> | <a href="/README.es.md">Español</a> | <a href="/README.ru.md">Русский</a> | <a href="/README.tr_TR.md">Türkçe</a></p>
 
 # xui-recipes — Генератор inbounds (прокси) для <a href="https://github.com/MHSanaei/3x-ui" target="_blank">3x-ui</a> панели
 
