@@ -35,13 +35,13 @@ Haga clic en **Authorize** → introduzca el token en el campo `bearerAuth` (`ht
 Un solo comando (igual que el instalador oficial de 3x-ui):
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash
 ```
 
 O descargar y ejecutar localmente:
 
 ```bash
-curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh
+curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh
 chmod +x xui-recipes.sh
 ./xui-recipes.sh
 ```
@@ -51,7 +51,7 @@ Luego introduzca las credenciales del panel.
 ## Uso
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash   # crear todo
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash   # crear todo
 XUI_ONLY="VLESS-TCP-REALITY-01" ./xui-recipes.sh   # solo las recetas indicadas
 XUI_INSECURE=1 ./xui-recipes.sh        # omitir verificación TLS (autofirmado)
 ```

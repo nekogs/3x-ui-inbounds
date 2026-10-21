@@ -35,13 +35,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 تک‌خطی (مثل نصب‌کننده رسمی 3x-ui):
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash
 ```
 
 یا دانلود و اجرای محلی:
 
 ```bash
-curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh
+curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh
 chmod +x xui-recipes.sh
 ./xui-recipes.sh
 ```
@@ -51,7 +51,7 @@ chmod +x xui-recipes.sh
 ## کاربرد
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash   # ساخت همه‌چیز
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash   # ساخت همه‌چیز
 XUI_ONLY="VLESS-TCP-REALITY-01" ./xui-recipes.sh   # فقط recipeهای نام‌برده شده
 XUI_INSECURE=1 ./xui-recipes.sh        # رد کردن تأیید TLS (self-signed)
 ```

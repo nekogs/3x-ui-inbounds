@@ -39,13 +39,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Одной строкой (как у официального установщика 3x-ui):
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash
 ```
 
 Или скачать и запустить локально:
 
 ```bash
-curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh
+curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh
 chmod +x xui-recipes.sh
 ./xui-recipes.sh
 ```
@@ -55,7 +55,7 @@ chmod +x xui-recipes.sh
 ## Использование
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash   # создать всё
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash   # создать всё
 XUI_ONLY="VLESS-TCP-REALITY-01" ./xui-recipes.sh   # только указанные рецепты
 XUI_INSECURE=1 ./xui-recipes.sh        # пропустить проверку TLS (self-signed)
 ```

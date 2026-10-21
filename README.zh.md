@@ -33,13 +33,13 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 一行命令（与官方 3x-ui 安装器相同风格）：
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash
 ```
 
 或下载后本地运行：
 
 ```bash
-curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh
+curl -Ls -o xui-recipes.sh https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh
 chmod +x xui-recipes.sh
 ./xui-recipes.sh
 ```
@@ -49,7 +49,7 @@ chmod +x xui-recipes.sh
 ## 用法
 
 ```bash
-curl -Ls https://raw.githubusercontent.com/nekogs/xui-recipes/main/xui-recipes.sh | bash   # 创建所有内容
+curl -Ls https://raw.githubusercontent.com/nekogs/3x-ui-inbounds/main/xui-recipes.sh | bash   # 创建所有内容
 XUI_ONLY="VLESS-TCP-REALITY-01" ./xui-recipes.sh   # 仅创建指定 recipe
 XUI_INSECURE=1 ./xui-recipes.sh        # 跳过 TLS 验证（自签名）
 ```
