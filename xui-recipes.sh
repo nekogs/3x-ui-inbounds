@@ -44,13 +44,13 @@ ask() {  # ask [-s] "prompt" var
   prompt="$1"; var="$2"
   if : 2>/dev/null < /dev/tty; then            # real terminal exists
     if [ "$silent" = 1 ]; then
-      IFS= read -rs "$var" < /dev/tty
+      IFS= read -rs -p "$prompt" "$var" < /dev/tty
     else
       IFS= read -rp "$prompt" "$var" < /dev/tty
     fi
   else                                          # no tty: fall back to stdin
     if [ "$silent" = 1 ]; then
-      IFS= read -rs "$var"
+      IFS= read -rs -p "$prompt" "$var"
     else
       IFS= read -rp "$prompt" "$var"
     fi
