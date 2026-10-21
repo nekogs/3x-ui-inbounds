@@ -115,8 +115,11 @@ CURL_TLS=""
 [ "${XUI_INSECURE:-0}" = "1" ] && CURL_TLS="-k"
 
 # api METHOD PATH [JSON] -> prints response body, warns on non-200
+# curl exit codes worth distinguishing: 60/58 = TLS cert problem (our main UX case),
+# 7 = refused, 28 = timeout, 6 = DNS. api_curlerr holds the last curl exit code.
+CURL_ERR=""
 api() {
-  local method="$1" path="$2" data="${3:-}" raw code body attempt
+  local method="$1" path="$2" data="${3:-}" raw code body attempt err
   for attempt in 1 2 3; do
     if [ -n "$data" ]; then
       raw=$(curl -sS $CURL_TLS -m 45 -w $'\n%{http_code}' -X "$method" \
@@ -127,15 +130,18 @@ api() {
       raw=$(curl -sS $CURL_TLS -m 45 -w $'\n%{http_code}' -X "$method" \
         -H "Authorization: Bearer $TOKEN" "$BASE$path" 2>/dev/null)
     fi
+    err=$?
+    CURL_ERR="$err"
     code=${raw##*$'\n'}
     body=${raw%$'\n'*}
-    # retry on empty body or non-2xx (typical for flaky TLS / schannel drops)
-    case "$code" in
-      2??) [ -n "$body" ] && break ;;
-      *)   [ "$attempt" -lt 3 ] && sleep 2 ;;
+    # retry only on network-level flakiness; TLS cert errors will not heal
+    case "$err:$code" in
+      0:2??) [ -n "$body" ] && break ;;
+      0:*)   [ "$attempt" -lt 3 ] && sleep 2 ;;
+      *)     break ;;   # curl itself failed (refused/timeout/TLS) — no point retrying
     esac
   done
-  [ "$code" = "200" ] || warn "HTTP ${code:-none} on $method $path"
+  [ "$code" = "200" ] || warn "HTTP ${code:-none} on $method $path (curl exit $err)"
   printf '%s' "$body"
 }
 
@@ -714,21 +720,46 @@ main() {
   BASE="https://$host:$port/${basepath#/}"
   TOKEN="$token"
 
-  # The panel's TLS cert usually matches its domain, not the bare IP the user
-  # typed. Without -k every request fails with curl 60 / schannel SEC_E_WRONG_PRINCIPAL
-  # before any recipe logic runs. Auto-enable insecure TLS for IP hosts unless
-  # the user set XUI_INSECURE explicitly.
-  if [ -z "${XUI_INSECURE:-}" ] && printf '%s' "$host" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
-    XUI_INSECURE=1
-    CURL_TLS="-k"
-    warn "host is an IP address — skipping TLS verification (cert is issued for a domain)"
+  # TLS strategy (option A): verify first, fall back to -k only on real cert
+  # problems (curl 60 = mismatch/expired/self-signed, 58 = bad alg). A domain
+  # whose cert matches keeps full verification. XUI_INSECURE=1 forces -k from
+  # the start; XUI_INSECURE=0 forbids the fallback.
+  local probe probe_file
+  probe_file=$(mktemp)
+  api GET "/panel/api/inbounds/list" > "$probe_file"
+  probe=$(cat "$probe_file")
+  if [ -z "$probe" ] && { [ "$CURL_ERR" = "60" ] || [ "$CURL_ERR" = "58" ]; }; then
+    if [ "${XUI_INSECURE:-1}" != "0" ]; then
+      warn "TLS certificate problem (curl exit $CURL_ERR) — retrying without certificate verification"
+      CURL_TLS="-k"
+      api GET "/panel/api/inbounds/list" > "$probe_file"
+      probe=$(cat "$probe_file")
+    fi
   fi
+  rm -f "$probe_file"
 
-  local probe
-  probe=$(api GET "/panel/api/inbounds/list")
   case "$probe" in
-    *'"success":true'*|*'"success": true'*) ok "connected to $BASE" ;;
-    *) die "cannot reach the panel — check host / port / basePath / token" ;;
+    *'"success":true'*|*'"success": true'*)
+      ok "connected to $BASE${CURL_TLS:+ (TLS verification disabled)}" ;;
+    *)
+      # option B: name the actual reason instead of a generic "cannot reach"
+      case "$CURL_ERR" in
+        6)  die "DNS: cannot resolve host '$host' — check the address" ;;
+        7)  die "connection refused by $host:$port — wrong port or panel is not running" ;;
+        28) die "timeout connecting to $host:$port — firewall may be blocking it (check the panel port in the panel settings)" ;;
+        35|58|60|61|77|90)
+            die "TLS certificate problem (curl exit $CURL_ERR) — the panel's cert does not match '$host'. Re-run with XUI_INSECURE=1 or connect via the domain the cert is issued for" ;;
+        0)
+            case "$probe" in
+              *'"success":false'*|*'"success": false'*)
+                die "panel rejected the API token — check the token (Bearer) in panel settings" ;;
+              "")
+                die "empty response from the panel — check host / port / basePath" ;;
+              *)
+                die "unexpected panel response — wrong basePath? URL must include WebBasePath" ;;
+            esac ;;
+        *)  die "cannot reach the panel (curl exit $CURL_ERR) — check host / port / basePath / token" ;;
+      esac ;;
   esac
 
   # ---- certificate paths from the panel (do not hardcode) ----
