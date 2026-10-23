@@ -6,32 +6,6 @@ Creates a standard set of Xray "recipe" inbounds on your panel through its REST 
 Runs on **any Linux host** (laptop, VPS, CI) — it only needs network access to the
 panel, not to be installed *on* the 3x-ui server.
 
-> [!IMPORTANT]
-> Enable API access on your panel before installing. See "Before installation" below.
-
-## Before installation
-
-You need to enable API access on the panel. Use the token that the 3x-ui (x-ui)
-installer script creates during setup.
-
-**API Token:**
-
-```
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
-Then open:
-
-```
-#Access URL#/panel/api-docs
-```
-
-Click **Authorize** → paste the token into the `bearerAuth` field (`http`, `Bearer`) → click **Authorize**.
-
-> [!WARNING]
-> After enabling API access, the panel may not load in the same browser window.
-> Clear the cache or open a new tab in incognito mode to fix this.
-
 ## Installation & run
 
 One-liner (same style as the official 3x-ui installer):
