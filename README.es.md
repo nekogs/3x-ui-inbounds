@@ -6,6 +6,15 @@ Crea un conjunto estándar de "recetas" de Xray a través de su API REST. Se eje
 **cualquier host con Linux** (portátil, VPS, CI): solo necesita acceso a la red al panel,
 no estar instalado *en* el servidor 3x-ui.
 
+
+> [!IMPORTANT]
+> La instalación requiere un token de API, que recibe al instalar el panel.
+> Si no guardó el token de API, puede generar uno nuevo ejecutando el siguiente
+> comando en el servidor con el panel 3x-ui:
+> ```bash
+> /usr/local/x-ui/x-ui setting -getApiToken -tokenName my-api-cli -tokenScope admin
+> ```
+
 ## Instalación y ejecución
 
 Un solo comando (igual que el instalador oficial de 3x-ui):

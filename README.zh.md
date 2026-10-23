@@ -5,6 +5,14 @@
 通过 REST API 在您的面板上创建一套标准的 Xray "recipe"。可在**任意 Linux 主机**
 （笔记本、VPS、CI）上运行——只需要能网络访问面板，无需安装在 3x-ui 服务器上。
 
+
+> [!IMPORTANT]
+> 安装需要 API Token，安装面板时会获得该令牌。
+> 如果您没有保存 API Token，可以在运行 3x-ui 面板的服务器上执行以下命令生成新令牌：
+> ```bash
+> /usr/local/x-ui/x-ui setting -getApiToken -tokenName my-api-cli -tokenScope admin
+> ```
+
 ## 安装与运行
 
 一行命令（与官方 3x-ui 安装器相同风格）：

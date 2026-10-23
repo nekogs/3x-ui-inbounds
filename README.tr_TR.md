@@ -6,6 +6,15 @@ Panelinizde REST API'si üzerinden standart bir Xray "tarif" inbound seti oluşt
 **Herhangi bir Linux ana makinesinde** (dizüstü, VPS, CI) çalışır — panele ağ erişimi
 yeterlidir, 3x-ui sunucusunun *üzerine* kurulması gerekmez.
 
+
+> [!IMPORTANT]
+> Kurulum için API token gerekir; bu token'ı paneli kurarken alırsınız.
+> API token'ı kaydetmediyseniz, 3x-ui panelinin çalıştığı sunucuda aşağıdaki komutu
+> çalıştırarak yeni bir token oluşturabilirsiniz:
+> ```bash
+> /usr/local/x-ui/x-ui setting -getApiToken -tokenName my-api-cli -tokenScope admin
+> ```
+
 ## Kurulum ve çalıştırma
 
 Tek satır (resmî 3x-ui yükleyicisiyle aynı biçimde):

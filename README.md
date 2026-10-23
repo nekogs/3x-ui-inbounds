@@ -6,6 +6,15 @@ Creates a standard set of Xray "recipe" inbounds on your panel through its REST 
 Runs on **any Linux host** (laptop, VPS, CI) — it only needs network access to the
 panel, not to be installed *on* the 3x-ui server.
 
+
+> [!IMPORTANT]
+> Installation requires an API token, which you receive when installing the panel.
+> If you did not save the API token, you can generate a new one by running the
+> following command on the server with the 3x-ui panel:
+> ```bash
+> /usr/local/x-ui/x-ui setting -getApiToken -tokenName my-api-cli -tokenScope admin
+> ```
+
 ## Installation & run
 
 One-liner (same style as the official 3x-ui installer):
