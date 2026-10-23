@@ -256,7 +256,13 @@ SEED_PORT=19998
 # Hysteria). Inbounds are created empty and the client is attached to them later.
 ensure_client_v3() { # $1=email
   local email="$1" uuid pass auth seed_payload seed_resp resp
-  uuid=$(rand_uuid); pass=$(rand_b64url 16); auth="a$(rand_b64url 12)"
+  # password must be STANDARD padded base64 of 16 bytes: on v3 the panel feeds
+  # the client-record password straight into SS-2022 (aes-128 PSK), and Xray
+  # decodes it with base64.StdEncoding — url-safe/unpadded => "bad key".
+  # The same value is fine for Trojan / Hysteria / TUIC.
+  # Also avoid '+' and '/': they break trojan:// / ss:// share links in some clients.
+  uuid=$(rand_uuid); auth="a$(rand_b64url 12)"
+  pass=$(rand_b64 16); while [[ "$pass" == *[+/]* ]]; do pass=$(rand_b64 16); done
   seed_payload=$(printf '{"enable":true,"remark":"zz-seed","listen":"","port":%s,"protocol":"vless","expiryTime":0,"total":0,"up":0,"down":0,"settings":{"clients":[],"decryption":"none"},"streamSettings":{"network":"tcp","tcpSettings":{"acceptProxyProtocol":false,"header":{"type":"none"}}},"sniffing":{"enabled":false},"tag":"zz-seed"}' "$SEED_PORT")
   seed_resp=$(api POST "/panel/api/inbounds/add" "$seed_payload")
   SEED_ID=$(json_num "$seed_resp" id)
@@ -405,6 +411,12 @@ b64len() { # $1=b64
   printf '%s' "$s" | openssl enc -base64 -d -A 2>/dev/null | wc -c | tr -d ' '
 }
 
+# is_std_b64 <s> -> 0 if s is standard (non url-safe) base64 WITH padding,
+# i.e. what Xray's SS-2022 accepts (base64.StdEncoding).
+is_std_b64() {
+  [[ "${1:-}" =~ ^[A-Za-z0-9+/]+={0,2}$ ]] && [ $(( ${#1} % 4 )) -eq 0 ]
+}
+
 # shadowsocks clients.
 # For SS-2022 the panel takes each client's PSK from its own client record, so we
 # must reuse the client's existing password when its length matches the cipher
@@ -419,7 +431,10 @@ ss_clients_json() {
     case "$method" in
       2022-*)
         psk="${C_PASS[$i]:-}"
-        [ "$(b64len "$psk")" = "$keylen" ] || psk=$(rand_b64 "$keylen")
+        # reuse only a valid STANDARD base64 key of the right length
+        if ! is_std_b64 "$psk" || [ "$(b64len "$psk")" != "$keylen" ]; then
+          psk=$(rand_b64 "$keylen")
+        fi
         ;;
       *) psk="$shared" ;;
     esac
@@ -465,6 +480,9 @@ settings_json() {
       # pick the cipher that matches the PSK length the panel's clients already have
       local kl method keylen
       kl=$(b64len "${C_PASS[0]:-}")
+      if [ "$MODERN" = "1" ] && ! is_std_b64 "${C_PASS[0]:-}"; then
+        warn "SS-2022: client password of ${C_EMAIL[0]:-?} is not standard base64 — Xray will fail with 'bad key' after attach"
+      fi
       case "$kl" in
         16) method="2022-blake3-aes-128-gcm"; keylen=16 ;;
         *)  method="2022-blake3-aes-256-gcm"; keylen=32; kl=32 ;;
@@ -857,8 +875,19 @@ main() {
           "$name" "$(proto_name "$proto")" "$port_free" "$inbound_id"
 
         # ---- health gate: did this inbound crash/restart xray into a bad config? ----
-        local xr_state xr_rc
-        xr_state=$(panel_xray_state); xr_rc=$?
+        # Adding an inbound restarts xray; a single immediate probe can catch it
+        # mid-restart ("stop") on a slow VPS and wrongly disable a good inbound.
+        # Poll for up to XUI_HEALTH_WAIT seconds before declaring it broken.
+        local xr_state xr_rc xr_t=0 xr_max="${XUI_HEALTH_WAIT:-20}"
+        while :; do
+          xr_state=$(panel_xray_state); xr_rc=$?
+          [ "$xr_rc" -ne 0 ] || [ "$xr_state" = "running" ] || [ "$xr_t" -ge "$xr_max" ] && break
+          sleep 2; xr_t=$((xr_t + 2))
+        done
+        [ "$xr_t" -gt 0 ] && log "     (xray state settled to '$xr_state' after ${xr_t}s)"
+        if [ "$xr_state" != "running" ] && [ "$xr_rc" -eq 0 ]; then
+          warn "xray errorMsg: $(json_str "$(api GET /panel/api/server/status)" errorMsg)"
+        fi
         if [ "$xr_rc" -ne 0 ]; then
           # panel API itself is unreachable — leave the inbound as-is, warn loudly.
           warn "inbound $name (port $port_free): panel status unavailable ($xr_rc) — leaving enabled"
