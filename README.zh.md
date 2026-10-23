@@ -5,31 +5,6 @@
 通过 REST API 在您的面板上创建一套标准的 Xray "recipe"。可在**任意 Linux 主机**
 （笔记本、VPS、CI）上运行——只需要能网络访问面板，无需安装在 3x-ui 服务器上。
 
-> [!IMPORTANT]
-> 安装前请在面板上启用 API 访问权限。详见下方「安装前」章节。
-
-## 安装前
-
-您需要启用面板的 API 访问权限。使用 3x-ui（x-ui）安装脚本在安装过程中创建的令牌。
-
-**API Token：**
-
-```
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
-然后打开：
-
-```
-#Access URL#/panel/api-docs
-```
-
-点击 **Authorize** → 将令牌粘贴到 `bearerAuth` 字段（`http`，`Bearer`）→ 点击 **Authorize**。
-
-> [!WARNING]
-> 启用 API 访问后，面板可能无法在同一浏览器窗口中打开。请清除缓存或以隐身模式
-> 打开新标签页来解决此问题。
-
 ## 安装与运行
 
 一行命令（与官方 3x-ui 安装器相同风格）：

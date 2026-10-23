@@ -6,33 +6,6 @@ Panelinizde REST API'si üzerinden standart bir Xray "tarif" inbound seti oluşt
 **Herhangi bir Linux ana makinesinde** (dizüstü, VPS, CI) çalışır — panele ağ erişimi
 yeterlidir, 3x-ui sunucusunun *üzerine* kurulması gerekmez.
 
-> [!IMPORTANT]
-> Kurulumdan önce panelde API erişimini etkinleştirin. Ayrıntılar için aşağıdaki
-> «Kurulumdan önce» bölümüne bakın.
-
-## Kurulumdan önce
-
-Panelin API erişimini etkinleştirmeniz gerekir. Bunun için 3x-ui (x-ui) kurulum
-betiğinin yükleme sırasında oluşturduğu token'ı kullanın.
-
-**API Token:**
-
-```
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
-Ardından şunu açın:
-
-```
-#Access URL#/panel/api-docs
-```
-
-**Authorize**'a tıklayın → token'ı `bearerAuth` alanına (`http`, `Bearer`) yapıştırın → **Authorize**'a tıklayın.
-
-> [!WARNING]
-> API erişimi etkinleştirildikten sonra panel aynı tarayıcı penceresinde açılmayabilir.
-> Sorunu çözmek için önbelleği temizleyin ya da gizli modda yeni bir sekme açın.
-
 ## Kurulum ve çalıştırma
 
 Tek satır (resmî 3x-ui yükleyicisiyle aynı biçimde):
